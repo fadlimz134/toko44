@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GadgetStore Pro - Cyber RGB Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050811;
+            --card: #0d1322;
+            --text: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border: #1e293b;
+            --success: #00f0ff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); padding: 20px; }
+        
+        @keyframes cyberBorder {
+            0% { border-color: #ff0055; box-shadow: 0 0 25px rgba(255, 0, 85, 0.3); }
+            33% { border-color: #00f0ff; box-shadow: 0 0 25px rgba(0, 240, 255, 0.3); }
+            66% { border-color: #7000ff; box-shadow: 0 0 25px rgba(112, 0, 255, 0.3); }
+            100% { border-color: #ff0055; box-shadow: 0 0 25px rgba(255, 0, 85, 0.3); }
+        }
+
+        @keyframes cyberText {
+            0% { color: #ff0055; text-shadow: 0 0 12px rgba(255,0,85,0.6); }
+            33% { color: #00f0ff; text-shadow: 0 0 12px rgba(0,240,255,0.6); }
+            66% { color: #b537ff; text-shadow: 0 0 12px rgba(181,55,255,0.6); }
+            100% { color: #ff0055; text-shadow: 0 0 12px rgba(255,0,85,0.6); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: linear-gradient(135deg, #0d1322 0%, #171033 100%); color: white; padding: 30px 40px; 
+            border-radius: 24px; margin-bottom: 30px; flex-wrap: wrap; gap: 20px; 
+            border: 2px solid #ff0055;
+            animation: cyberBorder 8s infinite;
+        }
+        header h1 { font-size: 2rem; font-weight: 800; animation: cyberText 8s infinite; }
+        
+        .search-box { padding: 14px 20px; width: 300px; border-radius: 14px; border: 1.5px solid #00f0ff; background: rgba(0,0,0,0.5); color: white; outline: none; font-size: 0.95rem; transition: all 0.3s; }
+        .search-box:focus { border-color: #ff0055; box-shadow: 0 0 20px rgba(255, 0, 85, 0.5); }
+        .search-box::placeholder { color: #94a3b8; }
+        
+        .main-layout { display: grid; grid-template-columns: 1fr 380px; gap: 30px; max-width: 1350px; margin: 0 auto; }
+        @media(max-width: 968px) { .main-layout { grid-template-columns: 1fr; } }
+        
+        .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+        
+        .card { 
+            background: var(--card); border: 1.5px solid var(--border); border-radius: 20px; overflow: hidden; 
+            display: flex; flex-direction: column; justify-content: space-between; 
+            transition: all 0.4s ease; 
+            animation: fadeIn 0.6s ease-out;
+        }
+        .card:hover { 
+            transform: translateY(-8px); 
+            border-color: #00f0ff;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.35);
+        }
+        .card img { width: 100%; height: 180px; object-fit: cover; cursor: pointer; background: #02040a; transition: transform 0.6s ease; }
+        .card:hover img { transform: scale(1.06); }
+        .card-body { padding: 20px; }
+        .card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; cursor: pointer; color: var(--text); transition: color 0.2s; }
+        .card-title:hover { color: #00f0ff; }
+        .card-price { color: #00f0ff; font-weight: 800; font-size: 1.15rem; margin-bottom: 8px; text-shadow: 0 0 10px rgba(0,240,255,0.4); }
+        .card-desc { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; line-height: 1.5; }
+        
+        .btn { 
+            background: linear-gradient(135deg, #7000ff 0%, #ff0055 100%); color: white; border: none; padding: 12px 20px; border-radius: 12px; font-weight: 700; cursor: pointer; 
+            width: 100%; transition: all 0.3s ease; text-align: center; font-size: 0.9rem; 
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.4);
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(0, 240, 255, 0.8); }
+        .btn-success { background: linear-gradient(135deg, #00f0ff 0%, #7000ff 100%); color: #fff; box-shadow: 0 0 20px rgba(0, 240, 255, 0.4); }
+        .btn-success:hover { box-shadow: 0 0 30px rgba(0, 240, 255, 0.9); }
+
+        .sidebar { background: var(--card); padding: 24px; border-radius: 20px; border: 1.5px solid var(--border); height: fit-content; margin-bottom: 25px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5); }
+        .sidebar h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 15px; color: var(--text); }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 0.9rem; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 0.825rem; font-weight: 700; margin-bottom: 6px; color: var(--text-muted); }
+        .form-group input, .form-group textarea { width: 100%; padding: 12px 16px; border: 1.5px solid var(--border); border-radius: 12px; font-size: 0.9rem; outline: none; transition: all 0.3s; background: #050811; color: #fff; }
+        .form-group input:focus, .form-group textarea:focus { border-color: #00f0ff; box-shadow: 0 0 15px rgba(0, 240, 255, 0.4); }
+        
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(2, 4, 10, 0.85); backdrop-filter: blur(10px); justify-content: center; align-items: center; padding: 15px; animation: fadeIn 0.3s ease; }
+        .modal-content { background: var(--card); border: 2px solid #00f0ff; padding: 35px; border-radius: 24px; width: 540px; max-width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 40px rgba(0, 240, 255, 0.3); color: #fff; }
+        .close { float: right; font-size: 28px; font-weight: bold; cursor: pointer; color: var(--text-muted); transition: color 0.2s; }
+        .close:hover { color: #ff0055; }
+        
+        .status-box { background: rgba(0, 240, 255, 0.1); border: 1px solid #00f0ff; padding: 16px; border-radius: 14px; margin-top: 15px; font-size: 0.9rem; color: #00f0ff; box-shadow: 0 0 15px rgba(0,240,255,0.2); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🛍️ GadgetStore Cyber Edition</h1>
+        <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+            <input type="text" id="searchInput" class="search-box" placeholder="🔍 Cari gadget futuristik..." onkeyup="filterProduk()">
+            <button class="btn" style="width: auto; padding: 12px 20px; background: rgba(0,0,0,0.6); border: 1px solid #00f0ff; box-shadow: 0 0 15px rgba(0,240,255,0.3);" onclick="bukaModalLoginAdmin()">🔑 Login Admin</button>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <div>
+            <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 20px; color: var(--text);">Katalog Produk Elite</h2>
+            <div id="productCatalog" class="catalog-grid">
+                <!-- Katalog dirender dinamis -->
+            </div>
+        </div>
+
+        <div>
+            <!-- KERANJANG & CHECKOUT -->
+            <div class="sidebar">
+                <h3>Keranjang Belanja (<span id="cartCount" style="color:#00f0ff;">0</span>)</h3>
+                <div id="cartItemsList" style="margin: 15px 0; max-height: 180px; overflow-y: auto;">
+                    <p style="font-size:0.85rem; color:var(--text-muted); text-align:center; padding:10px 0;">Keranjang belanja kosong.</p>
+                </div>
+                
+                <hr style="margin: 15px 0; border:0; border-top:1px solid var(--border);">
+                
+                <h4 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 14px;">Formulir Checkout</h4>
+                <div class="form-group"><label>Nama Pemesan</label><input type="text" id="namaPemesan" placeholder="Nama lengkap"></div>
+                <div class="form-group"><label>No WhatsApp</label><input type="text" id="noWa" placeholder="08xxxxxxxxxx"></div>
+                <div class="form-group"><label>Gmail</label><input type="email" id="emailUser" placeholder="email@gmail.com"></div>
+                <div class="form-group"><label>Lokasi / Alamat Pengiriman</label><textarea id="lokasiUser" rows="2" placeholder="Alamat lengkap tujuan..."></textarea></div>
+                <button class="btn btn-success" onclick="prosesCheckout()" style="margin-top: 5px;">Pesan Sekarang</button>
+            </div>
+
+            <!-- CEK STATUS PESANAN PELANGGAN -->
+            <div class="sidebar">
+                <h3>📦 Lacak Status Pesanan</h3>
+                <div class="form-group" style="margin-top: 10px;">
+                    <label>Masukkan Nama Pemesan Anda:</label>
+                    <input type="text" id="cekNama" placeholder="Sesuai nama saat pesan">
+                </div>
+                <button class="btn" onclick="cekStatusPesanan()">Cek Status</button>
+                <div id="hasilCekStatus"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DETAIL & KOMENTAR -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- MODAL LOGIN ADMIN -->
+    <div id="modalAdminLogin" class="modal">
+        <div class="modal-content" style="width: 400px; border-color:#ff0055; box-shadow:0 0 40px rgba(255,0,85,0.3);">
+            <span class="close" onclick="tutupModalLoginAdmin()">&times;</span>
+            <h3 style="margin-bottom: 15px; font-size: 1.4rem; color:#ff0055;">Login Administrator</h3>
+            <div class="form-group"><label>Username</label><input type="text" id="userAdminModal" placeholder="admin"></div>
+            <div class="form-group"><label>Password</label><input type="password" id="passAdminModal" placeholder="admin"></div>
+            <button class="btn" onclick="prosesLoginAdminModal()" style="margin-top: 10px;">Masuk ke Panel Admin</button>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+
+        function getProducts() {
+            let defaultProducts = [
+                {
+                    id: 1,
+                    name: "Cyber Smartphone X",
+                    price: "Rp 9.500.000",
+                    desc: "Layar Hologram AMOLED 144Hz, Chipset Quantum, Pendingin Cair RGB.",
+                    image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500",
+                    video: "https://www.w3schools.com/html/mov_bbb.mp4",
+                    comments: ["Desainnya luar biasa futuristik!", "Performa sangat kencang."]
+                }
+            ];
+            let stored = JSON.parse(localStorage.getItem('storeProducts'));
+            return stored && stored.length > 0 ? stored : defaultProducts;
+        }
+
+        function renderCatalog(productsToRender = null) {
+            const catalog = document.getElementById('productCatalog');
+            const products = productsToRender || getProducts();
+            catalog.innerHTML = '';
+
+            products.forEach(prod => {
+                catalog.innerHTML += `
+                    <div class="card">
+                        <div style="overflow: hidden;">
+                            <img src="${prod.image}" alt="${prod.name}" onclick="openDetail(${prod.id})" onerror="this.src='https://via.placeholder.com/300x180?text=No+Image'">
+                            <div class="card-body">
+                                <div class="card-title" onclick="openDetail(${prod.id})">${prod.name}</div>
+                                <div class="card-price">${prod.price}</div>
+                                <p class="card-desc">${prod.desc.substring(0, 60)}...</p>
+                            </div>
+                        </div>
+                        <div style="padding: 0 20px 20px 20px;">
+                            <button class="btn" onclick="addToCart('${prod.name}', '${prod.price}')">+ Keranjang</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function filterProduk() {
+            let keyword = document.getElementById('searchInput').value.toLowerCase();
+            let products = getProducts();
+            let filtered = products.filter(p => p.name.toLowerCase().includes(keyword));
+            renderCatalog(filtered);
+        }
+
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            updateCartUI();
+            alert(`Berhasil menambahkan "${name}" ke keranjang!`);
+        }
+
+        function updateCartUI() {
+            document.getElementById('cartCount').innerText = cart.length;
+            const list = document.getElementById('cartItemsList');
+            if(cart.length === 0) {
+                list.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted); text-align:center; padding:10px 0;">Keranjang belanja kosong.</p>`;
+                return;
+            }
+            list.innerHTML = '';
+            cart.forEach((item) => {
+                list.innerHTML += `<div class="cart-item"><span>${item.name}</span> <b style="color:#00f0ff;">${item.price}</b></div>`;
+            });
+        }
+
+        function openDetail(id) {
+            let products = getProducts();
+            let prod = products.find(p => p.id === id);
+            if(!prod) return;
+
+            let commentsHtml = prod.comments && prod.comments.length > 0 
+                ? prod.comments.map(c => `<li style="font-size:0.85rem; background:#050811; padding:10px 14px; border-radius:10px; margin-bottom:8px; border:1px solid var(--border);">💬 ${c}</li>`).join('') 
+                : '<p style="font-size:0.85rem; color:var(--text-muted);">Belum ada ulasan untuk produk ini.</p>';
+
+            document.getElementById('modalBody').innerHTML = `
+                <h3 style="font-size: 1.4rem; margin-bottom: 14px; color: #00f0ff;">${prod.name}</h3>
+                <img src="${prod.image}" style="width:100%; height:230px; object-fit:cover; border-radius:16px; margin-bottom:14px;" onerror="this.src='https://via.placeholder.com/500x230?text=No+Image'">
+                <div style="font-size:1.35rem; font-weight:800; color:#00f0ff; margin-bottom:12px; text-shadow:0 0 10px rgba(0,240,255,0.4);">${prod.price}</div>
+                <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:18px; line-height:1.6;"><b>Deskripsi Lengkap:</b><br>${prod.desc}</p>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="font-weight:700; font-size:0.9rem; display:block; margin-bottom:8px; color:var(--text);">🎬 Video Review & Demo Langsung:</label>
+                    <video src="${prod.video}" controls style="width:100%; border-radius:12px; background:#000; max-height:200px;"></video>
+                </div>
+
+                <hr style="margin: 18px 0; border:0; border-top:1px solid var(--border);">
+                <h4 style="font-size:1.05rem; font-weight:800; margin-bottom:12px;">Ulasan Pelanggan</h4>
+                <ul style="list-style:none; padding:0; margin-bottom:18px; max-height:140px; overflow-y:auto;">${commentsHtml}</ul>
+                
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="newComment" placeholder="Tulis ulasan produk..." style="flex:1; padding:12px 16px; border:1.5px solid var(--border); border-radius:12px; font-size:0.9rem; outline:none; background:#050811; color:#fff;">
+                    <button class="btn" style="width:auto; padding:12px 20px;" onclick="tambahKomentar(${prod.id})">Kirim</button>
+                </div>
+            `;
+            document.getElementById('detailModal').style.display = 'flex';
+        }
+
+        function closeModal() { document.getElementById('detailModal').style.display = 'none'; }
+
+        function tambahKomentar(id) {
+            let txt = document.getElementById('newComment').value;
+            if(!txt) return alert('Komentar tidak boleh kosong!');
+            let products = getProducts();
+            let idx = products.findIndex(p => p.id === id);
+            if(idx !== -1) {
+                if(!products[idx].comments) products[idx].comments = [];
+                products[idx].comments.push(txt);
+                localStorage.setItem('storeProducts', JSON.stringify(products));
+                openDetail(id);
+            }
+        }
+
+        function prosesCheckout() {
+            if(cart.length === 0) return alert('Keranjang belanja Anda masih kosong!');
+            const namaPemesan = document.getElementById('namaPemesan').value;
+            const noWa = document.getElementById('noWa').value;
+            const email = document.getElementById('emailUser').value;
+            const lokasi = document.getElementById('lokasiUser').value;
+
+            if(!namaPemesan || !noWa || !email || !lokasi) return alert('Mohon lengkapi seluruh formulir checkout!');
+
+            let itemNames = cart.map(i => `${i.name} (${i.price})`).join(', ');
+            let orders = JSON.parse(localStorage.getItem('storeOrders')) || [];
+            
+            orders.push({
+                namaPemesan,
+                wa: noWa,
+                email,
+                lokasi,
+                items: itemNames,
+                status: 'Sedang dikemas'
+            });
+
+            localStorage.setItem('storeOrders', JSON.stringify(orders));
+            alert('Pesanan berhasil dibuat dan terkirim ke Admin! Status awal: Sedang dikemas.');
+            
+            cart = [];
+            updateCartUI();
+            document.getElementById('namaPemesan').value = '';
+            document.getElementById('noWa').value = '';
+            document.getElementById('emailUser').value = '';
+            document.getElementById('lokasiUser').value = '';
+        }
+
+        function cekStatusPesanan() {
+            let namaCari = document.getElementById('cekNama').value.trim().toLowerCase();
+            let orders = JSON.parse(localStorage.getItem('storeOrders')) || [];
+            let hasilDiv = document.getElementById('hasilCekStatus');
+
+            if(!namaCari) {
+                hasilDiv.innerHTML = `<p style="color:#ff0055; font-size:0.85rem; margin-top:10px;">Masukkan nama pemesan Anda terlebih dahulu!</p>`;
+                return;
+            }
+
+            let found = orders.filter(o => o.namaPemesan.toLowerCase().includes(namaCari));
+            if(found.length === 0) {
+                hasilDiv.innerHTML = `<div class="status-box" style="background:rgba(255,0,85,0.1); border-color:#ff0055; color:#ff0055;">Tidak ada pesanan atas nama "${namaCari}".</div>`;
+                return;
+            }
+
+            let html = '';
+            found.forEach(f => {
+                html += `<div class="status-box"><b>Barang:</b> ${f.items}<br><b>Status Pesanan:</b> <span style="color:#00f0ff; font-weight:800;">${f.status}</span></div>`;
+            });
+            hasilDiv.innerHTML = html;
+        }
+
+        function bukaModalLoginAdmin() { document.getElementById('modalAdminLogin').style.display = 'flex'; }
+        function tutupModalLoginAdmin() { document.getElementById('modalAdminLogin').style.display = 'none'; }
+
+        function prosesLoginAdminModal() {
+            let u = document.getElementById('userAdminModal').value;
+            let p = document.getElementById('passAdminModal').value;
+            if(u === 'admin' && p === 'admin') {
+                localStorage.setItem('isAdminLoggedIn', 'true');
+                window.location.href = 'admin.html';
+            } else {
+                alert('Username atau Password salah! (admin / admin)');
+            }
+        }
+
+        window.onload = () => { renderCatalog(); };
+    </script>
+</body>
+</html>
